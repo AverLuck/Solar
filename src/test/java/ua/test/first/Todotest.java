@@ -41,7 +41,7 @@ public class Todotest {
         }
         Assert.assertEquals( true,isSelected);
 
-        Thread.sleep(1000);
+        Thread.sleep(100000);
 
 
     }
