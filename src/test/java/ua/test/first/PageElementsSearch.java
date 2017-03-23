@@ -2,8 +2,8 @@ package ua.test.first;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
-
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
@@ -12,32 +12,34 @@ import static com.codeborne.selenide.Selenide.$$;
 /**
  * Created by Averluck on 13.03.2017.
  */
-public class PageElementsSeach extends Page{
+public class PageElementsSearch extends Page{
+
+    final static Logger logger = Logger.getLogger(PageElementsSearch.class);
 
     private SelenideElement Search = $("#BaseMainContent_MainContent_btnSearch"); //кнопка поиска записи
 
     //*статус начала подачи и конца получает равные значения(потом изменить на разные)
-    public String searchPublicationDate(String publicationdate){           //дата публиации
-        $("#BaseMainContent_MainContent_txtPublicationDate_txtDateFrom").setValue(publicationdate); //установка начала подачи извещения
-        $("#BaseMainContent_MainContent_txtPublicationDate_txtDateTo").setValue(publicationdate);//установка конца подачи извещения
+    public String searchPublicationDate(String publicationDate){        //дата публиации
+
+        $("#BaseMainContent_MainContent_txtPublicationDate_txtDateFrom").setValue(publicationDate); //установка начала подачи извещения
+        $("#BaseMainContent_MainContent_txtPublicationDate_txtDateTo").setValue(publicationDate);//установка конца подачи извещения
 
         Search.click();
-        String finishdate = $(By.xpath("//*[contains(@title, '" + publicationdate + "')]")).waitUntil(visible,5000).getText();//метод взял у Феди,не нашёл сам как вытащить
+        String finishdate = $(By.xpath("//*[contains(@title, '" + publicationDate + "')]")).waitUntil(visible,5000).getText();//метод взял у Феди,не нашёл сам как вытащить
         return finishdate;
     }
 
-    public String setnameoflot(String name) {        //имя лота
-        SelenideElement nameoflot =  $("#BaseMainContent_MainContent_cbxUseTradeName");
-        nameoflot.click();
-        String name;
-        $("##BaseMainContent_MainContent_txtName_txtText").setValue(name);
+    public String searchNameOfLot(String name) {        //имя лота
+        $("#BaseMainContent_MainContent_txtName_txtText").setValue(name);
         Search.click();
         String finishnameoflot = $(By.partialLinkText(name)).waitUntil(visible,10000).getText();
         return finishnameoflot;
     }
+    //#BaseMainContent_MainContent_txtNumber_txtText
 
-    public String setnumberoflot(String number) {    //номер лота
-        SelenideElement numberoflot = $ ("#BaseMainContent_MainContent_txtNumber_txtText").setValue(number);
+
+    public String searchNumberOfLot(String number) {    //номер лота
+        $("#BaseMainContent_MainContent_txtNumber_txtText").setValue(number);
         Search.click();
         String finishnumber = $("a[href='/supplier/auction/Trade/View.aspx?Id=" + number + "']").shouldBe(visible).getText();
         return finishnumber;
@@ -80,11 +82,13 @@ public class PageElementsSeach extends Page{
         return finishRegion;
     }
 
-    public String seacrhContract(String contract) {
-        $("#BaseMainContent_MainContent_txtLotName_txtText").setValue(contract);
+    public String searchSubject(String subject) {
+        logger.info("Method started");
+        $("#BaseMainContent_MainContent_txtLotName_txtText").setValue(subject);
+        logger.info("Value is set");
         Search.click();
-
-        String finishContract = $(By.xpath("//*[contains(@title, '" + contract + "') and text() = '" + contract + "']")).waitUntil(visible, 5000).getText();
+        logger.info("SearchButton clicked");
+        String finishContract = $(By.xpath("//*[contains(@title, '" + subject + "') and text() = '" + subject + "']")).waitUntil(visible, 5000).getText();
 
         return finishContract;
     }
